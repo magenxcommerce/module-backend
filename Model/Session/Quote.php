@@ -24,7 +24,6 @@ use Magento\Customer\Api\GroupManagementInterface;
  * @method Quote setOrderId($orderId)
  * @method int getOrderId()
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  * @since 100.0.2
  */
 class Quote extends \Magento\Framework\Session\SessionManager
@@ -150,8 +149,7 @@ class Quote extends \Magento\Framework\Session\SessionManager
             $this->_quote = $this->quoteFactory->create();
             if ($this->getStoreId()) {
                 if (!$this->getQuoteId()) {
-                    $customerGroupId = $this->groupManagement->getDefaultGroup($this->getStoreId())->getId();
-                    $this->_quote->setCustomerGroupId($customerGroupId);
+                    $this->_quote->setCustomerGroupId($this->groupManagement->getDefaultGroup()->getId());
                     $this->_quote->setIsActive(false);
                     $this->_quote->setStoreId($this->getStoreId());
                     

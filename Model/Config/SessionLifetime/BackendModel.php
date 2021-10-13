@@ -16,17 +16,14 @@ use Magento\Framework\Exception\LocalizedException;
  */
 class BackendModel extends Value
 {
-    /** Maximum admin session lifetime; 1 year*/
+    /** Maximum dmin session lifetime; 1 year*/
     const MAX_LIFETIME = 31536000;
 
     /** Minimum admin session lifetime */
     const MIN_LIFETIME = 60;
 
     /**
-     * Processing object before save data
-     *
      * @since 100.1.0
-     * @throws LocalizedException
      */
     public function beforeSave()
     {

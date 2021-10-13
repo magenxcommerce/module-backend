@@ -5,43 +5,36 @@
  */
 namespace Magento\Backend\Block\Dashboard\Orders;
 
-use Magento\Backend\Block\Template\Context;
-use Magento\Backend\Helper\Data;
-use Magento\Framework\Module\Manager;
-use Magento\Reports\Model\ResourceModel\Order\CollectionFactory;
-
 /**
  * Adminhtml dashboard recent orders grid
  *
- * @api
  * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
- * @since 100.0.2
  */
 class Grid extends \Magento\Backend\Block\Dashboard\Grid
 {
     /**
-     * @var CollectionFactory
+     * @var \Magento\Reports\Model\ResourceModel\Order\CollectionFactory
      */
     protected $_collectionFactory;
 
     /**
-     * @var Manager
+     * @var \Magento\Framework\Module\Manager
      */
     protected $_moduleManager;
 
     /**
-     * @param Context $context
-     * @param Data $backendHelper
-     * @param Manager $moduleManager
-     * @param CollectionFactory $collectionFactory
+     * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\Backend\Helper\Data $backendHelper
+     * @param \Magento\Framework\Module\Manager $moduleManager
+     * @param \Magento\Reports\Model\ResourceModel\Order\CollectionFactory $collectionFactory
      * @param array $data
      */
     public function __construct(
-        Context $context,
-        Data $backendHelper,
-        Manager $moduleManager,
-        CollectionFactory $collectionFactory,
+        \Magento\Backend\Block\Template\Context $context,
+        \Magento\Backend\Helper\Data $backendHelper,
+        \Magento\Framework\Module\Manager $moduleManager,
+        \Magento\Reports\Model\ResourceModel\Order\CollectionFactory $collectionFactory,
         array $data = []
     ) {
         $this->_moduleManager = $moduleManager;
@@ -50,8 +43,6 @@ class Grid extends \Magento\Backend\Block\Dashboard\Grid
     }
 
     /**
-     * Construct.
-     *
      * @return void
      */
     protected function _construct()
@@ -61,8 +52,6 @@ class Grid extends \Magento\Backend\Block\Dashboard\Grid
     }
 
     /**
-     * Prepare collection.
-     *
      * @return $this
      */
     protected function _prepareCollection()
@@ -121,8 +110,6 @@ class Grid extends \Magento\Backend\Block\Dashboard\Grid
     }
 
     /**
-     * Prepare columns.
-     *
      * @return $this
      */
     protected function _prepareColumns()
@@ -142,9 +129,7 @@ class Grid extends \Magento\Backend\Block\Dashboard\Grid
             ]
         );
 
-        $baseCurrencyCode = $this->_storeManager->getStore(
-            (int)$this->getParam('store')
-        )->getBaseCurrencyCode();
+        $baseCurrencyCode = $this->_storeManager->getStore((int)$this->getParam('store'))->getBaseCurrencyCode();
 
         $this->addColumn(
             'total',
@@ -164,7 +149,7 @@ class Grid extends \Magento\Backend\Block\Dashboard\Grid
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getRowUrl($row)
     {

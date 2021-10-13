@@ -5,8 +5,6 @@
  */
 namespace Magento\Backend\Block\Widget;
 
-use Magento\Framework\Cache\LockGuardedCacheLoader;
-
 /**
  * Constructor modification point for Magento\Backend\Block\Widget.
  *
@@ -19,7 +17,7 @@ use Magento\Framework\Cache\LockGuardedCacheLoader;
  * the classes they were introduced for.
  *
  * @api
- * @SuppressWarnings(PHPMD)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @since 100.0.2
  */
 class Context extends \Magento\Backend\Block\Template\Context
@@ -72,7 +70,6 @@ class Context extends \Magento\Backend\Block\Template\Context
      * @param \Magento\Framework\Code\NameBuilder $nameBuilder
      * @param \Magento\Backend\Block\Widget\Button\ButtonList $buttonList
      * @param Button\ToolbarInterface $toolbar
-     * @param LockGuardedCacheLoader|null $lockQuery
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -108,8 +105,7 @@ class Context extends \Magento\Backend\Block\Template\Context
         \Magento\Framework\Data\Form\FormKey $formKey,
         \Magento\Framework\Code\NameBuilder $nameBuilder,
         Button\ButtonList $buttonList,
-        Button\ToolbarInterface $toolbar,
-        LockGuardedCacheLoader $lockQuery = null
+        Button\ToolbarInterface $toolbar
     ) {
         parent::__construct(
             $request,
@@ -141,8 +137,7 @@ class Context extends \Magento\Backend\Block\Template\Context
             $backendSession,
             $mathRandom,
             $formKey,
-            $nameBuilder,
-            $lockQuery
+            $nameBuilder
         );
 
         $this->buttonList = $buttonList;

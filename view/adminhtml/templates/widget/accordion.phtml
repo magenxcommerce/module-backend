@@ -4,7 +4,8 @@
  * See COPYING.txt for license details.
  */
 
-/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
+// @codingStandardsIgnoreFile
+
 ?>
 <?php
 /**
@@ -18,14 +19,11 @@ $items = $block->getItems();
         <?= $block->getChildHtml($_item->getId()) ?>
     <?php endforeach ?>
     </dl>
-    <?php $scriptString = <<<script
+    <script>
         require([
             'mage/adminhtml/accordion'
         ], function(){
-            tab_content_{$block->getHtmlId()}AccordionJs = new varienAccordion('tab_content_{$block->getHtmlId()}',
-             '{$block->escapeJs($block->getShowOnlyOne())}');
-        });
-script;
-    ?>
-    <?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>
+        	tab_content_<?= $block->getHtmlId() ?>AccordionJs = new varienAccordion('tab_content_<?= $block->getHtmlId() ?>', '<?= /* @escapeNotVerified */ $block->getShowOnlyOne() ?>');
+    	});
+    </script>
 <?php endif; ?>

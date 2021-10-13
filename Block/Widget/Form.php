@@ -3,10 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Backend\Block\Widget;
-
-use Magento\Framework\App\ObjectManager;
 
 /**
  * Backend form widget
@@ -30,23 +27,13 @@ class Form extends \Magento\Backend\Block\Widget
      */
     protected $_template = 'Magento_Backend::widget/form.phtml';
 
-    /** @var Form\Element\ElementCreator */
-    private $creator;
-
     /**
-     * Constructs form
-     *
      * @param \Magento\Backend\Block\Template\Context $context
      * @param array $data
-     * @param Form\Element\ElementCreator|null $creator
      */
-    public function __construct(
-        \Magento\Backend\Block\Template\Context $context,
-        array $data = [],
-        Form\Element\ElementCreator $creator = null
-    ) {
+    public function __construct(\Magento\Backend\Block\Template\Context $context, array $data = [])
+    {
         parent::__construct($context, $data);
-        $this->creator = $creator ?: ObjectManager::getInstance()->get(Form\Element\ElementCreator::class);
     }
 
     /**
@@ -59,6 +46,7 @@ class Form extends \Magento\Backend\Block\Widget
         parent::_construct();
 
         $this->setDestElementId('edit_form');
+        $this->setShowGlobalIcon(false);
     }
 
     /**
@@ -160,7 +148,6 @@ class Form extends \Magento\Backend\Block\Widget
 
     /**
      * Initialize form fields values
-     *
      * Method will be called after prepareForm and can be used for field values initialization
      *
      * @return $this
@@ -186,11 +173,32 @@ class Form extends \Magento\Backend\Block\Widget
             if (!$this->_isAttributeVisible($attribute)) {
                 continue;
             }
-            if (($inputType = $attribute->getFrontend()->getInputType())
-                && !in_array($attribute->getAttributeCode(), $exclude)
-                && ('media_image' !== $inputType || $attribute->getAttributeCode() == 'image')
+            if (($inputType = $attribute->getFrontend()->getInputType()) && !in_array(
+                $attribute->getAttributeCode(),
+                $exclude
+            ) && ('media_image' != $inputType || $attribute->getAttributeCode() == 'image')
             ) {
-                $element = $this->creator->create($fieldset, $attribute);
+                $fieldType = $inputType;
+                $rendererClass = $attribute->getFrontend()->getInputRendererClass();
+                if (!empty($rendererClass)) {
+                    $fieldType = $inputType . '_' . $attribute->getAttributeCode();
+                    $fieldset->addType($fieldType, $rendererClass);
+                }
+
+                $element = $fieldset->addField(
+                    $attribute->getAttributeCode(),
+                    $fieldType,
+                    [
+                        'name' => $attribute->getAttributeCode(),
+                        'label' => $attribute->getFrontend()->getLocalizedLabel(),
+                        'class' => $attribute->getFrontend()->getClass(),
+                        'required' => $attribute->getIsRequired(),
+                        'note' => $attribute->getNote()
+                    ]
+                )->setEntityAttribute(
+                    $attribute
+                );
+
                 $element->setAfterElementHtml($this->_getAdditionalElementHtml($element));
 
                 $this->_applyTypeSpecificConfig($inputType, $element, $attribute);

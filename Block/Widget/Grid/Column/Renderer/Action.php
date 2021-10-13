@@ -6,10 +6,6 @@
 
 namespace Magento\Backend\Block\Widget\Grid\Column\Renderer;
 
-use Magento\Framework\App\ObjectManager;
-use Magento\Framework\Math\Random;
-use Magento\Framework\View\Helper\SecureHtmlRenderer;
-
 /**
  * Grid column widget for rendering action grid cells
  *
@@ -25,33 +21,17 @@ class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Text
     protected $_jsonEncoder;
 
     /**
-     * @var SecureHtmlRenderer
-     */
-    private $secureHtmlRenderer;
-
-    /**
-     * @var Random
-     */
-    private $random;
-
-    /**
      * @param \Magento\Backend\Block\Context $context
      * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
      * @param array $data
-     * @param SecureHtmlRenderer|null $secureHtmlRenderer
-     * @param Random|null $random
      */
     public function __construct(
         \Magento\Backend\Block\Context $context,
         \Magento\Framework\Json\EncoderInterface $jsonEncoder,
-        array $data = [],
-        ?SecureHtmlRenderer $secureHtmlRenderer = null,
-        ?Random $random = null
+        array $data = []
     ) {
         $this->_jsonEncoder = $jsonEncoder;
         parent::__construct($context, $data);
-        $this->secureHtmlRenderer = $secureHtmlRenderer ?? ObjectManager::getInstance()->get(SecureHtmlRenderer::class);
-        $this->random = $random ?? ObjectManager::getInstance()->get(Random::class);
     }
 
     /**
@@ -67,7 +47,7 @@ class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Text
             return '&nbsp;';
         }
 
-        if (count($actions) == 1 && !$this->getColumn()->getNoLink()) {
+        if (sizeof($actions) == 1 && !$this->getColumn()->getNoLink()) {
             foreach ($actions as $action) {
                 if (is_array($action)) {
                     return $this->_toLinkHtml($action, $row);
@@ -124,36 +104,21 @@ class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Text
         $this->_transformActionData($action, $actionCaption, $row);
 
         if (isset($action['confirm'])) {
-            // phpcs:ignore Magento2.Functions.DiscouragedFunction
             $action['onclick'] = 'return window.confirm(\'' . addslashes(
                 $this->escapeHtml($action['confirm'])
             ) . '\')';
             unset($action['confirm']);
         }
 
-        if (empty($action['id'])) {
-            $action['id'] = 'id' .$this->random->getRandomString(10);
-        }
         $actionAttributes->setData($action);
-        $onclick = $actionAttributes->getData('onclick');
-        $style = $actionAttributes->getData('style');
-        $actionAttributes->unsetData(['onclick', 'style']);
-        $html = '<a ' . $actionAttributes->serialize() . '>' . $actionCaption . '</a>';
-        if ($onclick) {
-            $html .= $this->secureHtmlRenderer->renderEventListenerAsTag('onclick', $onclick, "#{$action['id']}");
-        }
-        if ($style) {
-            $html .= $this->secureHtmlRenderer->renderStyleAsTag($style, "#{$action['id']}");
-        }
-
-        return $html;
+        return '<a ' . $actionAttributes->serialize() . '>' . $actionCaption . '</a>';
     }
 
     /**
      * Prepares action data for html render
      *
-     * @param &array $action
-     * @param &string $actionCaption
+     * @param array &$action
+     * @param string &$actionCaption
      * @param \Magento\Framework\DataObject $row
      * @return $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
@@ -179,7 +144,7 @@ class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Text
                     if (is_array($action['url']) && isset($action['field'])) {
                         $params = [$action['field'] => $this->_getValue($row)];
                         if (isset($action['url']['params'])) {
-                            $params[] = $action['url']['params'];
+                            $params = array_merge($action['url']['params'], $params);
                         }
                         $action['href'] = $this->getUrl($action['url']['base'], $params);
                         unset($action['field']);

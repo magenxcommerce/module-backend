@@ -6,17 +6,12 @@
  */
 namespace Magento\Backend\Controller\Adminhtml\Dashboard;
 
-use Magento\Framework\App\Action\HttpPostActionInterface;
-
-/**
- * Get most viewed products controller.
- */
-class ProductsViewed extends AjaxBlock implements HttpPostActionInterface
+class ProductsViewed extends AjaxBlock
 {
     /**
      * Gets most viewed products list
      *
-     * @return \Magento\Framework\Controller\Result\Raw
+     * @return \Magento\Backend\Model\View\Result\Page
      */
     public function execute()
     {
