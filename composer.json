@@ -1,0 +1,41 @@
+{
+    "name": "magenxcommerce/module-backend",
+    "description": "N/A",
+    "require": {
+        "php": "~5.6.5|7.0.2|7.0.4|~7.0.6|~7.1.0",
+        "magenxcommerce/module-store": "100.1.*",
+        "magenxcommerce/module-directory": "100.1.*",
+        "magenxcommerce/module-developer": "100.1.*",
+        "magenxcommerce/module-eav": "100.1.*",
+        "magenxcommerce/module-theme": "100.1.*",
+        "magenxcommerce/module-reports": "100.1.*",
+        "magenxcommerce/module-sales": "100.1.*",
+        "magenxcommerce/module-quote": "100.1.*",
+        "magenxcommerce/module-catalog": "101.0.*",
+        "magenxcommerce/module-user": "100.1.*",
+        "magenxcommerce/module-security": "100.1.*",
+        "magenxcommerce/module-backup": "100.1.*",
+        "magenxcommerce/module-customer": "100.1.*",
+        "magenxcommerce/module-translation": "100.1.*",
+        "magenxcommerce/module-require-js": "100.1.*",
+        "magenxcommerce/module-config": "100.1.*",
+        "magenxcommerce/framework": "100.1.*"
+    },
+    "type": "magento2-module",
+    "version": "100.1.13",
+    "license": [
+        "OSL-3.0",
+        "AFL-3.0"
+    ],
+    "autoload": {
+        "files": [
+            "registration.php"
+        ],
+        "psr-4": {
+            "Magento\\Backend\\": ""
+        }
+    },
+    "replace": {
+        "magento/module-backend": "*"
+    }
+}
